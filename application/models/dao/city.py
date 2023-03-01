@@ -5,7 +5,7 @@ from sqlalchemy.orm import relationship
 from datetime import datetime
 
 
-# Объявление декларативного (описательного) метода представления БД
+#Объявление декларативного (описательного) метода представления БД
 Base = declarative_base()
 
 
