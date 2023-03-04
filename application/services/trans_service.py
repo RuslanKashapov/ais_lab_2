@@ -48,9 +48,10 @@ class TransformatorService:
                                                    types=transformator.types,
                                                    health_index=transformator.health_index)
 
-    def update_trans_info(self, trans_id: int, methane: int) -> bool:
+    def update_trans_info(self, transformator: TransformatorDTO) -> bool:
         with SessionLocal() as session:
-            return repository_service.update_hydrogen_by_transformator_id(session, trans_id, methane)
+            return repository_service.update_hydrogen_by_transformator_id(session,  transformator_id=transformator.id,
+                                                                          hydrogen=transformator.hydrogen)
 
     def delete_trans_by_id(self, id: int) -> bool:
         with SessionLocal() as session:

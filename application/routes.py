@@ -29,7 +29,7 @@ async def get_all_transforecast_by_city_name(city_name: str):
 
 
 
-@router.get('/transforecast', response_model=TransformatorDTO)
+@router.get('/transforecast/{city_id}', response_model=TransformatorDTO)
 async def get_transforecast_by_city_id(city_id: int):
     """ Получение записи о погоде в населенном пункте по идентификатору населенного пункта (необходим параметр ?city_id=) """
     response = service.get_transformator_in_city(city_id)
@@ -51,9 +51,11 @@ async def post_transforecast(trans: TransformatorDTO):
 
 
 @router.put('/transforecast', status_code=202)
-async def put_transforecast(id: int, hydrogen: int):
+async def put_transforecast(transformator):
+    print(transformator)
     """ Обновить самую старую запись о погоде """
-    if service.update_trans_info(id, hydrogen):
+    if service.update_trans_info(transformator):
+        print(transformator.id, transformator.hydrogen)
         return Response(status_code=202)
     else:
         raise HTTPException(
