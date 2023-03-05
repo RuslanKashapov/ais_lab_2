@@ -25,9 +25,6 @@ def get_transformator_by_id(db: Session, transformator_id: int) -> Optional[Tran
     return result
 
 
-
-
-
 def get_trans_by_city_name(db: Session, city_name: str) -> Iterable[Transformator]:
     result = db.query(Transformator).join(City).filter(City.name == city_name).all()
     return result
@@ -59,9 +56,6 @@ def create_transformator(db: Session, hydrogen: int, oxygen: int, nitrogen: int,
     return add_transformator(db, transformator)
 
 
-
-
-
 def add_transformator(db: Session, transformator: Transformator) -> bool:
     try:
         db.add(transformator)
@@ -79,12 +73,9 @@ def update_hydrogen_by_transformator_id(db: Session, transformator_id: int, hydr
     return add_transformator(db, transformator)
 
 
-
 def get_transformator_by_city_id(db: Session, city_id: int) -> Optional[Transformator]:
     result = db.query(Transformator).filter(Transformator.city == city_id).order_by(Transformator.updated_on.asc()).first()
     return result
-
-
 
 
 @dbexception
@@ -93,15 +84,11 @@ def delete_transformator_by_id(db: Session, transformator_id: int) -> bool:
     db.delete(trans)
 
 
-
-
-
 @dbexception
 def add_city(db: Session, city_name: str) -> bool:
     city = City(name=city_name)
     db.add(city)
     return True
-
 
 
 @dbexception
