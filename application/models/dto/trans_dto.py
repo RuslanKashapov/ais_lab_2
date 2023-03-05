@@ -11,7 +11,7 @@ class TransformatorDTO(BaseModel):
         Если данные, передаваемые клиенту сильно отличаются от данных,
         которые принимает REST API сервера, необходимо разделять DTO
         для запросов и ответов, например, WeatherRequestDTO, WeatherResponseDTO """
-    id: int
+    # id: int
     hydrogen: int
     oxygen: int
     nitrogen: int
