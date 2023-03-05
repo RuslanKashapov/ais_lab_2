@@ -89,7 +89,7 @@ class RESTServerUser(HttpUser):
     @task(3)
     def put_task(self):
         """ Тест PUT-запроса (обновление записи о погоде) """
-        test_data = {'id': random.randint(14, 16), 'hydrogen': random.randint(1, 100)}
+        test_data = {'id': 1, 'hydrogen': random.randint(1, 100)}
         put_data = json.dumps(test_data)
         # отправляем PUT-запрос на адрес <SERVER>/api/weatherforecast/{city_name}
         with self.client.put('/transforecast',

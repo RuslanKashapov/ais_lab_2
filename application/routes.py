@@ -2,6 +2,8 @@ from fastapi import APIRouter, HTTPException, status, Request, Response
 from starlette.responses import RedirectResponse
 from application.models.dto import *
 from application.services.trans_service import TransformatorService
+from fastapi.encoders import jsonable_encoder
+from pydantic import BaseModel
 
 
 """
@@ -15,6 +17,10 @@ router = APIRouter( tags=['Transformator Forecast API'])       # подключ�
 service = TransformatorService()              # подключаем слой с дополнительной бизнес-логикой
 
 
+class Data(BaseModel):
+    id: int
+    hydrogen: int
+
 @router.get('/')
 async def root():
     """ Переадресация на страницу Swagger """
@@ -25,8 +31,6 @@ async def root():
 async def get_all_transforecast_by_city_name(city_name: str):
     """ Получение всех записей о погоде в населённом пункте """
     return service.get_all_transformator_in_city(city_name)
-
-
 
 
 @router.get('/transforecast/{city_id}', response_model=TransformatorDTO)
@@ -51,11 +55,13 @@ async def post_transforecast(trans: TransformatorDTO):
 
 
 @router.put('/transforecast', status_code=202)
-async def put_transforecast(transformator):
-    print(transformator)
-    """ Обновить самую старую запись о погоде """
-    if service.update_trans_info(transformator):
-        print(transformator.id, transformator.hydrogen)
+async def put_transforecast(input_data: Data):
+    trans = TransformatorDTO
+    trans.id = input_data.id
+    trans.hydrogen = input_data.hydrogen
+    """ Обновить гидроген """
+    if service.update_trans_info(trans):
+        print(trans.id, trans.hydrogen)
         return Response(status_code=202)
     else:
         raise HTTPException(
