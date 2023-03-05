@@ -59,7 +59,6 @@ class Transformator(Base):
         return f'{self.__dict__}'
 
 
-
 class City(Base):
     """ Таблица с наименованиями населённых пунктов """
     __tablename__ = "city"
