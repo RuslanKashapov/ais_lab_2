@@ -12,6 +12,7 @@ class TransformatorDTO(BaseModel):
         которые принимает REST API сервера, необходимо разделять DTO
         для запросов и ответов, например, WeatherRequestDTO, WeatherResponseDTO """
     # id: int
+    number: int
     hydrogen: int
     oxygen: int
     nitrogen: int
@@ -30,3 +31,8 @@ class TransformatorDTO(BaseModel):
     types: int
     health_index:  Optional[float]
     updated_on: Optional[datetime]
+
+
+class TransformatorUpdateInfo(BaseModel):
+    number: int
+    hydrogen: int
