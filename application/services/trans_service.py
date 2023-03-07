@@ -1,6 +1,6 @@
 from typing import Optional, List
 from application.config import SessionLocal
-from application.models.dao import Transformator
+from application.models.dao.transformator import Transformator
 from application.models.dto import TransformatorDTO, CityDTO
 import application.services.repository_service as repository_service
 
@@ -11,10 +11,11 @@ import application.services.repository_service as repository_service
 
 class TransformatorService:
 
-    def get_transformator_in_city(self, city_id: int) -> Optional[TransformatorDTO]:
+    def get_transformator_by_number(self, trans_number: int) -> Optional[TransformatorDTO]:
         result = None
+        # print(trans_number)
         with SessionLocal() as session:     # конструкция with позволяет автоматически завершить сессию после выхода из блока
-            result = repository_service.get_transformator_by_city_id(session, city_id)
+            result = repository_service.get_transformator_by_number(session, trans_number)
         if result is not None:
             return self.map_trans_data_to_dto(result)
         return result
@@ -30,6 +31,7 @@ class TransformatorService:
     def add_trans_info(self, transformator: TransformatorDTO) -> bool:
         with SessionLocal() as session:
             return repository_service.create_transformator(session,
+                                                           number=transformator.number,
                                                            hydrogen=transformator.hydrogen,
                                                            oxygen=transformator.oxygen,
                                                            nitrogen=transformator.nitrogen,
@@ -48,14 +50,15 @@ class TransformatorService:
                                                            types=transformator.types,
                                                            health_index=transformator.health_index)
 
-    def update_trans_info(self, transformator: TransformatorDTO) -> bool:
+    def update_trans_hydrogen(self, transformator: TransformatorDTO) -> bool:
         with SessionLocal() as session:
-            return repository_service.update_hydrogen_by_transformator_id(session,  transformator_id=transformator.id,
-                                                                          hydrogen=transformator.hydrogen)
+            return repository_service.update_hydrogen_by_transformator_number(session,
+                                                                              transformator_number=transformator.number,
+                                                                              hydrogen=transformator.hydrogen)
 
-    def delete_trans_by_id(self, id: int) -> bool:
+    def delete_trans_by_number(self, number: int) -> bool:
         with SessionLocal() as session:
-            return repository_service.delete_transformator_by_id(session, id)
+            return repository_service.delete_transformator_by_number(session, number)
 
     def add_city(self, city: CityDTO) -> bool:
         if city.name != "":
@@ -66,7 +69,7 @@ class TransformatorService:
     def map_trans_data_to_dto(self, trans_dao: Transformator):
         """ Метод для конвертирования (маппинга) Weather DAO в WeatherDTO """
         return TransformatorDTO(
-            id=trans_dao.id,
+            number=trans_dao.number,
             hydrogen=trans_dao.hydrogen,
             oxygen=trans_dao.oxygen,
             nitrogen=trans_dao.nitrogen,

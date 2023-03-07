@@ -1,8 +1,9 @@
 from typing import Optional, Iterable
 from sqlalchemy.orm import Session
-from application.models.dao import *
 import functools
 import traceback
+
+from application.models.dao.transformator import Transformator, City, Types
 
 
 def dbexception(db_func):
@@ -20,8 +21,8 @@ def dbexception(db_func):
     return decorated_func
 
 
-def get_transformator_by_id(db: Session, transformator_id: int) -> Optional[Transformator]:
-    result = db.query(Transformator).filter(Transformator.id == transformator_id).first()
+def get_transformator_by_number(db: Session, transformator_number: int) -> Optional[Transformator]:
+    result = db.query(Transformator).filter(Transformator.number == transformator_number).first()
     return result
 
 
@@ -30,11 +31,12 @@ def get_trans_by_city_name(db: Session, city_name: str) -> Iterable[Transformato
     return result
 
 
-def create_transformator(db: Session, hydrogen: int, oxygen: int, nitrogen: int, methane: int, co: int, co_2: int,
+def create_transformator(db: Session, number: int, hydrogen: int, oxygen: int, nitrogen: int, methane: int, co: int, co_2: int,
                          ethylene: int, ethane: int, acethylene: int, dbds: int, power_factor: float, interfacial_v: int,
                          dielectric_rigidity: int, water_content: int, city_id: int, types: int,
                          health_index: float) -> bool:
     transformator = Transformator(
+        number=number,
         hydrogen=hydrogen,
         oxygen=oxygen,
         nitrogen=nitrogen,
@@ -52,7 +54,7 @@ def create_transformator(db: Session, hydrogen: int, oxygen: int, nitrogen: int,
         city=city_id,
         types=types,
         health_index=health_index
-        )
+    )
     return add_transformator(db, transformator)
 
 
@@ -67,20 +69,20 @@ def add_transformator(db: Session, transformator: Transformator) -> bool:
     return True
 
 
-def update_hydrogen_by_transformator_id(db: Session, transformator_id: int, hydrogen: int) -> bool:
-    transformator = get_transformator_by_id(db, transformator_id)
+def update_hydrogen_by_transformator_number(db: Session, transformator_number: int, hydrogen: int) -> bool:
+    transformator = get_transformator_by_number(db, transformator_number)
     transformator.hydrogen = hydrogen
     return add_transformator(db, transformator)
 
 
-def get_transformator_by_city_id(db: Session, city_id: int) -> Optional[Transformator]:
-    result = db.query(Transformator).filter(Transformator.city == city_id).order_by(Transformator.updated_on.asc()).first()
-    return result
+# def get_transformator_by_city_id(db: Session, city_id: int) -> Optional[Transformator]:
+#     result = db.query(Transformator).filter(Transformator.city == city_id).order_by(Transformator.updated_on.asc()).first()
+#     return result
 
 
 @dbexception
-def delete_transformator_by_id(db: Session, transformator_id: int) -> bool:
-    trans = get_transformator_by_id(db, transformator_id)
+def delete_transformator_by_number(db: Session, transformator_number: int) -> bool:
+    trans = get_transformator_by_number(db, transformator_number)
     db.delete(trans)
 
 

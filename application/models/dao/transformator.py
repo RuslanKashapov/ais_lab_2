@@ -14,6 +14,7 @@ class Transformator(Base):
     __tablename__ = "transformator"
 
     id = Column(Integer, primary_key=True)
+    number = Column('number', Integer, nullable=False)
     hydrogen = Column('hydrogen', Integer, nullable=False)
     oxygen = Column('oxygen', Integer, nullable=False)
     nitrogen = Column('nitrogen', Integer, nullable=False)

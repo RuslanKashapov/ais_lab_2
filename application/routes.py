@@ -2,8 +2,6 @@ from fastapi import APIRouter, HTTPException, status, Request, Response
 from starlette.responses import RedirectResponse
 from application.models.dto import *
 from application.services.trans_service import TransformatorService
-from pydantic import BaseModel
-
 
 """
 
@@ -15,35 +13,29 @@ from pydantic import BaseModel
 router = APIRouter( tags=['Transformator Forecast API'])       # подключаем данный роутер к корневому адресу /api
 service = TransformatorService()              # подключаем слой с дополнительной бизнес-логикой
 
-
-class Data(BaseModel):
-    id: int
-    hydrogen: int
-
-
 @router.get('/')
 async def root():
     """ Переадресация на страницу Swagger """
     return RedirectResponse(url='/docs', status_code=307)
 
 
-@router.get('/transforecast/{city_name}', response_model=List[TransformatorDTO])
+@router.get('/transformator/{city_name}', response_model=List[TransformatorDTO])
 async def get_all_transforecast_by_city_name(city_name: str):
     """ Получение всех записей о трансформаторах в определенном городе """
     return service.get_all_transformator_in_city(city_name)
 
 
-@router.get('/transforecast/{city_id}', response_model=TransformatorDTO)
-async def get_transforecast_by_city_id(city_id: int):
-    """ Получение записи о трансформаторе в населенном пункте по идентификатору населенного пункта """
-    response = service.get_transformator_in_city(city_id)
+@router.get('/transformator', response_model=TransformatorDTO)
+async def get_transformator_by_number(trans_number: int):
+    """ Получение записи о трансформаторе по номеру """
+    response = service.get_transformator_by_number(trans_number)
     if response is None:
         return Response(status_code=204)
     return response
 
 
-@router.post('/transforecast', status_code=201)
-async def post_transforecast(trans: TransformatorDTO):
+@router.post('/transformator', status_code=201)
+async def post_transformator(trans: TransformatorDTO):
     """ Добавить новую запись о трансформаторе """
     if service.add_trans_info(trans):
         return Response(status_code=201)
@@ -54,14 +46,13 @@ async def post_transforecast(trans: TransformatorDTO):
         )
 
 
-@router.put('/transforecast', status_code=202)
-async def put_transforecast(input_data: Data):
-    trans = TransformatorDTO
-    trans.id = input_data.id
-    trans.hydrogen = input_data.hydrogen
+@router.put('/transformator', status_code=202)
+async def put_transformator_by_hydrogen(input: TransformatorUpdateInfo):
     """ Обновить гидроген """
-    if service.update_trans_info(trans):
-        print(trans.id, trans.hydrogen)
+    trans = TransformatorDTO
+    trans.number = input.number
+    trans.hydrogen = input.hydrogen
+    if service.update_trans_hydrogen(trans):
         return Response(status_code=202)
     else:
         raise HTTPException(
@@ -70,11 +61,10 @@ async def put_transforecast(input_data: Data):
         )
 
 
-
-@router.delete('/transforecast/{id}', status_code=200)
-async def del_transforecast(id: int):
+@router.delete('/transformator/<int:number>}', status_code=200)
+async def del_transformator(number: int):
     """ Удаление всех записей о трансформаторе в населённом пункте """
-    if service.delete_trans_by_id(id):
+    if service.delete_trans_by_number(number):
         return Response(status_code=200)
     else:
         raise HTTPException(

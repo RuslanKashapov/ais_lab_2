@@ -16,16 +16,17 @@ def populate_city(db: Session) -> None:
         add_city(db, city_name)
 
 
-def populate_weather_type(db: Session) -> None:
-    for weather_type_name in TRANS_TYPE:
-        add_type(db, weather_type_name)
+def populate_trans_type(db: Session) -> None:
+    for trans_type_name in TRANS_TYPE:
+        add_type(db, trans_type_name)
 
 
 if __name__ == "__main__":
     with SessionLocal() as session:
         populate_city(session)
-        populate_weather_type(session)
+        populate_trans_type(session)
         create_transformator(session,
+                             number = 1,
                              hydrogen=1,
                              oxygen=1,
                              nitrogen=1,

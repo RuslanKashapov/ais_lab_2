@@ -8,8 +8,6 @@ from locust import HttpUser, task, tag, between
 # Статичные данные для тестирования
 CITY_NAMES = ['ufa', 'moscow', 'saint-petersburg', 'paris']
 
-WEATHER_TYPES = ['CLEAN', 'CLOUDY', 'RAIN']
-
 
 class RESTServerUser(HttpUser):
     """ Класс, эмулирующий пользователя / клиента сервера """
@@ -22,12 +20,12 @@ class RESTServerUser(HttpUser):
     @tag("get_all_task")
     @task(3)
     def get_all_task(self):
-        """ Тест GET-запроса (получение нескольких записей о погоде) """
+        """ Тест GET-запроса (получение записей о трансформаторах в определенном городе) """
         city_id = random.randint(0, 3)      # генерируем случайный id в диапазоне [0, 3]
         city_name = CITY_NAMES[city_id]     # получаем случайное значение населенного пункта из списка CITY_NAMES
-        with self.client.get(f'/transforecast/{city_name}',
+        with self.client.get(f'/transformator/{city_name}',
                              catch_response=True,
-                             name='/transforecast/{city_name}') as response:
+                             name='/transformator/{city_name}') as response:
             # Если получаем код HTTP-код 200, то оцениваем запрос как "успешный"
             if response.status_code == 200:
                 response.success()
@@ -39,10 +37,10 @@ class RESTServerUser(HttpUser):
     @task(10)
     def get_one_task(self):
         """ Тест GET-запроса (получение одной записи) """
-        city_id = random.randint(1, 4)
-        with self.client.get(f'/transforecast/{city_id}',
+        trans_number = 22
+        with self.client.get(f'/transformator?trans_number={trans_number}',
                              catch_response=True,
-                             name='/transforecast/{city_id}') as response:
+                             name='/transformator?trans_number={trans_number}>') as response:
             # Если получаем код HTTP-код 200 или 204, то оцениваем запрос как "успешный"
             if response.status_code == 200 or response.status_code == 204:
                 response.success()
@@ -52,9 +50,10 @@ class RESTServerUser(HttpUser):
     @tag("post_task")
     @task(1)
     def post_task(self):
-        """ Тест POST-запроса (создание записи о погоде) """
+        """ Тест POST-запроса (создание записи о трансформаторе) """
         # Генерируем случайные данные в опредленном диапазоне
         test_data = {
+                     'number': random.randint(1, 1000),
                      'hydrogen': random.randint(1, 100),
                      'oxygen': random.randint(1, 100),
                      'nitrogen': random.randint(1, 100),
@@ -75,9 +74,9 @@ class RESTServerUser(HttpUser):
                      }
         post_data = json.dumps(test_data)       # сериализуем тестовые данные в json-строку
         # отправляем POST-запрос с данными (POST_DATA) на адрес <SERVER>/api/weatherforecast
-        with self.client.post('/transforecast',
+        with self.client.post('/transformator',
                               catch_response=True,
-                              name='/transforecast', data=post_data,
+                              name='/transformator', data=post_data,
                               headers={'content-type': 'application/json'}) as response:
             # проверяем, корректность возвращаемого HTTP-кода
             if response.status_code == 201:
@@ -89,12 +88,12 @@ class RESTServerUser(HttpUser):
     @task(3)
     def put_task(self):
         """ Тест PUT-запроса (обновление записи о погоде) """
-        test_data = {'id': 1, 'hydrogen': random.randint(1, 100)}
+        test_data = {'number': 1, 'hydrogen': random.randint(1, 100)}
         put_data = json.dumps(test_data)
         # отправляем PUT-запрос на адрес <SERVER>/api/weatherforecast/{city_name}
-        with self.client.put('/transforecast',
+        with self.client.put('/transformator',
                              catch_response=True,
-                             name='/transforecast',
+                             name='/transformator',
                              data=put_data,
                              headers={'content-type': 'application/json'}) as response:
             if response.status_code == 202:

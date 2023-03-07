@@ -38,7 +38,8 @@ class TestWeatherRepositoryService(unittest.TestCase):
     def test_create_weather(self):
         """ Тест функции создания записи Weather """
         result = create_transformator(self.session,
-                                      hydrogen= rnd.randint(1, 100),
+                                      number=rnd.randint(1, 1000),
+                                      hydrogen=rnd.randint(1, 100),
                                       oxygen=rnd.randint(1, 100),
                                       nitrogen=rnd.randint(1, 100),
                                       methane=rnd.randint(1, 100),
@@ -73,8 +74,8 @@ class TestWeatherRepositoryService(unittest.TestCase):
     '''
 
     def test_update_hydrogen_by_transformator_id(self):
-        update_hydrogen_by_transformator_id(self.session, transformator_id=2, hydrogen=2)
-        self.assertTrue(get_transformator_by_id(self.session, 2).hydrogen == 2)
+        update_hydrogen_by_transformator_number(self.session, transformator_number=2, hydrogen=2)
+        self.assertTrue(get_transformator_by_number(self.session, 2).hydrogen == 2)
 
     def tearDown(self):
         """ Наследуемый метод tearDown определяет инструкции,
