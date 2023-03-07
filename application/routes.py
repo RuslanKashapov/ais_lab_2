@@ -44,7 +44,7 @@ async def post_transformator(trans: TransformatorDTO):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Can't add new Transformator data",
         )
-
+#ахах
 
 @router.put('/transformator', status_code=202)
 async def put_transformator_by_hydrogen(input: TransformatorUpdateInfo):

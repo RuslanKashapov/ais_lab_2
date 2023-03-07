@@ -30,7 +30,7 @@ def get_trans_by_city_name(db: Session, city_name: str) -> Iterable[Transformato
     result = db.query(Transformator).join(City).filter(City.name == city_name).all()
     return result
 
-
+#ахах
 def create_transformator(db: Session, number: int, hydrogen: int, oxygen: int, nitrogen: int, methane: int, co: int, co_2: int,
                          ethylene: int, ethane: int, acethylene: int, dbds: int, power_factor: float, interfacial_v: int,
                          dielectric_rigidity: int, water_content: int, city_id: int, types: int,

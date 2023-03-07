@@ -28,6 +28,7 @@ class TransformatorService:
                 trans_data.append(self.map_trans_data_to_dto(w))
         return trans_data
 
+    # ахах
     def add_trans_info(self, transformator: TransformatorDTO) -> bool:
         with SessionLocal() as session:
             return repository_service.create_transformator(session,

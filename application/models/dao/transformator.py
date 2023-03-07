@@ -7,7 +7,7 @@ from datetime import datetime
 
 #Объявление декларативного (описательного) метода представления БД
 Base = declarative_base()
-
+#ахах
 
 class Transformator(Base):
     """ Таблица с наименованиями населённых пунктов """
