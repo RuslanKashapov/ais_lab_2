@@ -4,7 +4,7 @@ from typing import (
 )
 
 from datetime import datetime
-
+#ахах
 
 class TransformatorDTO(BaseModel):
     """ DTO для добавления, обновления и получения информации о погоде.
@@ -30,7 +30,7 @@ class TransformatorDTO(BaseModel):
     city_id: Optional[int]
     types: int
     health_index:  Optional[float]
-    updated_on: Optional[datetime]
+    # updated_on: Optional[datetime]
 
 
 class TransformatorUpdateInfo(BaseModel):

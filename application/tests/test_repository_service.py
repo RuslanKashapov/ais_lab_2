@@ -73,6 +73,7 @@ class TestWeatherRepositoryService(unittest.TestCase):
         self.assertIsNone(result)       # запись не должна существовать
     '''
 
+    # ахах
     def test_update_hydrogen_by_transformator_id(self):
         update_hydrogen_by_transformator_number(self.session, transformator_number=2, hydrogen=2)
         self.assertTrue(get_transformator_by_number(self.session, 2).hydrogen == 2)

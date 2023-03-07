@@ -84,6 +84,7 @@ class RESTServerUser(HttpUser):
             else:
                 response.failure(f'Status code is {response.status_code}')
 
+    # ахах
     @tag("put_task")
     @task(3)
     def put_task(self):
